@@ -1,0 +1,48 @@
+ new-item -name "fileserver" -itemtype Directory -path C:\
+PS C:\fileserver> new-item -path C:\ -Name "fileserver" -ItemType Directory
+set-location -path C:\fileserver
+# below is function to store all the prompts
+function GENPROMPTS{
+
+$name = read-host 'What is your name?'
+$name
+$path = read-host 'What file path are you wanting?'
+$path
+}
+#activate the first prompts
+GENPROMPTS
+# have a function of this prompt which kicks ya out if your not prepared.
+function JUSTDOIT
+$prompt = read-host 'Are you sure?'
+
+if ($prompt = no)
+
+{exit}
+
+# wow
+
+[else
+{$prompt}]
+
+JUSTDOIT
+$number = read-host 'Please input a number'
+$number
+$num = 5,50,50,3,1
+$num | foreach-object {$number * $num}
+
+$fileout = ".\printers.json"
+# time to get printers
+$printjob = test-connection -computername get-printer | mkdir import.json
+
+
+$job = test-connection -computername (get-content "serverlist.csv") -asjob
+if ($job.jobstateinfo.state -ne "running") {$results = receive-job
+$job}
+
+$employeelistcsv = import-csv -path 'C:\users\black\downloads\employeelist.csv'
+foreach ($employeename in $employeelistcsv)
+    {$employeename = $employeelistcsv.name.replace(' ','').ToLower()
+    new-item $employeename -itemtype directory
+    $folder = $employeelistcsv + $employeename
+    New-item -path $folder -Name "hello.txt" -itemtype "file" -value "welcome to college"
+}
